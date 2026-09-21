@@ -203,7 +203,10 @@ def split_pattern_options(body: str) -> tuple[str, str] | None:
         options = body[index + 1 :]
         if options_are_known(options):
             return body[:index], options
-    return Nonedef parse_options(options: str) -> dict | None:
+    return None
+
+
+def parse_options(options: str) -> dict | None:
     included: list[str] = []
     excluded: list[str] = []
     party = None
@@ -686,9 +689,15 @@ def build() -> None:
 
     resources = write_rulesets("ads", ad_rules, 1)
     resources += write_rulesets("trackers", tracker_rules, 1_000_000)
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from build_hardening import build as build_hardening
+
+    build_hardening()
+    resources.append({"id": "hardening", "enabled": True, "path": "rules/hardening.json"})
     groups = {
         "ads": [item["id"] for item in resources if item["id"].startswith("ads")],
         "trackers": [item["id"] for item in resources if item["id"].startswith("trackers")],
+        "hardening": ["hardening"],
     }
     (RULES_DIR / "rulesets.json").write_text(json.dumps(groups, indent=2) + "\n", encoding="utf-8")
     update_manifest(resources)

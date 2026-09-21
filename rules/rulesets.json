@@ -1,8 +1,5 @@
 {
-  "ads": [
-    "ads"
-  ],
-  "trackers": [
-    "trackers"
-  ]
+  "ads": ["ads"],
+  "trackers": ["trackers"],
+  "hardening": ["hardening"]
 }

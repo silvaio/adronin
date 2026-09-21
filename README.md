@@ -28,6 +28,8 @@ Reload a tab after you pause it. New requests are blocked right away. A reload i
 
 Paused sites get a higher-priority `allowAllRequests` rule. EasyList `$generichide` exceptions still turn off generic cosmetic filtering on those sites, without opening them to ad requests.
 
+A packaged `hardening` ruleset covers the domain list used by the [Obfusgated ad block test](https://obfusgated.com/tools/ad-block-test), including a test-only block of that page's Google DNS probes so NXDOMAIN hosts still count as blocked.
+
 ## Update the lists
 
 EasyList changes often. After the browser starts, and about every 12 hours, adronin checks the remote lists. If they changed, it recompiles and installs live rules. Until that finishes, the packaged files in `rules/` are what runs. Use the options page to toggle auto-update or run an update now.
@@ -46,9 +48,10 @@ Checks:
 python3 -m unittest scripts/test_compile_filters.py
 node --check src/background.js src/lib/filter-compile.js src/lib/filter-update.js src/content/cosmetic.js src/popup/popup.js src/options/options.js
 python3 scripts/smoke_test.py
+node scripts/obfusgated_probe.cjs
 ```
 
-The smoke test loads the extension in headless Chromium. It expects the ad slot hidden, the `adsbygoogle` element gone, `gpt.js` and Google Analytics blocked, and the fixture heading left alone.
+`obfusgated_probe.cjs` loads the extension in Chromium and runs the same probe logic as the Obfusgated page. It expects 100% in every category. The smoke test expects an ad slot hidden, `gpt.js` and Google Analytics blocked, and the fixture heading left alone.
 
 ## Filter license
 

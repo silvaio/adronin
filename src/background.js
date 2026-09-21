@@ -21,7 +21,7 @@ const PAUSE_IDS = Array.from({ length: MAX_PAUSED }, (_, index) => DYNAMIC_BASE 
 const counts = new Map();
 let flushTimer = null;
 const pendingCounts = new Map();
-let rulesetGroups = { ads: ["ads"], trackers: ["trackers"] };
+let rulesetGroups = { ads: ["ads"], trackers: ["trackers"], hardening: ["hardening"] };
 let queue = Promise.resolve();
 
 function badgeText(count) {
@@ -66,7 +66,11 @@ async function syncPauseRules(sites) {
 
 async function syncRulesetsNow() {
   const current = await settings();
-  const owned = new Set([...rulesetGroups.ads, ...rulesetGroups.trackers]);
+  const owned = new Set([
+    ...rulesetGroups.ads,
+    ...rulesetGroups.trackers,
+    ...(rulesetGroups.hardening || []),
+  ]);
   const want = new Set();
   // Packaged static rulesets cover the first run. After a live EasyList
   // compile is installed, keep those static sets off so rules are not doubled.
@@ -75,6 +79,9 @@ async function syncRulesetsNow() {
   }
   if (current.enabled && current.blockTrackers && !current.liveNetworkActive) {
     rulesetGroups.trackers.forEach((id) => want.add(id));
+  }
+  if (current.enabled) {
+    (rulesetGroups.hardening || []).forEach((id) => want.add(id));
   }
   const enabled = new Set(await chrome.declarativeNetRequest.getEnabledRulesets());
   const enableRulesetIds = [...want].filter((id) => !enabled.has(id));
