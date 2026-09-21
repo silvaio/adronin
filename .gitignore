@@ -1,4 +1,5 @@
 build/
+_metadata/
 __pycache__/
 *.pyc
 .chrome-profile/
