@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>adronin settings</title>
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="../../icons/logo.png" alt="" width="72" height="72">
+        <div>
+          <h1>adronin</h1>
+          <p>Blocks ad requests, then removes leftover slots from the page.</p>
+        </div>
+      </header>
+
+      <section>
+        <label class="row">
+          <span>
+            <strong>Block ads</strong>
+            <small>EasyList network and cosmetic filters.</small>
+          </span>
+          <input id="enabled" type="checkbox">
+        </label>
+        <label class="row">
+          <span>
+            <strong>Block trackers</strong>
+            <small>EasyPrivacy. Turn this off if a site breaks.</small>
+          </span>
+          <input id="trackers" type="checkbox">
+        </label>
+        <label class="row">
+          <span>
+            <strong>Update filters in the background</strong>
+            <small>After the browser starts, refresh EasyList when it changed.</small>
+          </span>
+          <input id="auto-update" type="checkbox">
+        </label>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Filter updates</h2>
+          <button id="update-now" type="button">Update now</button>
+        </div>
+        <p id="update-status" class="empty">Checking…</p>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Paused sites</h2>
+          <button id="clear" type="button">Clear</button>
+        </div>
+        <ul id="paused"></ul>
+        <p id="empty" class="empty">No sites are paused.</p>
+      </section>
+
+      <section class="about">
+        <h2>Filters</h2>
+        <p>
+          Network rules come from EasyList and EasyPrivacy, which are
+          © their contributors and licensed under
+          <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.
+          Rebuild a local baseline with <code>python3 scripts/compile_filters.py</code>.
+          While the browser is open, adronin also downloads EasyList updates when the lists change.
+        </p>
+        <p id="build"></p>
+      </section>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>

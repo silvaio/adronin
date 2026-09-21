@@ -1,0 +1,15 @@
+! Extra filters shipped with adronin. EasyList is still the main source.
+||securepubads.g.doubleclick.net^
+||pagead2.googlesyndication.com^
+||tpc.googlesyndication.com^
+||googleads.g.doubleclick.net^
+||adservice.google.com^
+||youtube.com/api/stats/ads^
+||youtube.com/pagead/^
+||youtube.com/ptracking^
+||youtube.com/get_midroll_^
+##ins.adsbygoogle
+##[id^="google_ads_iframe"]
+##[id^="div-gpt-ad"]
+##amp-ad
+##[data-ad-slot]

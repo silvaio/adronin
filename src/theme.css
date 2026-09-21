@@ -1,0 +1,23 @@
+:root {
+  color-scheme: dark;
+  --ink: #17100d;
+  --ink-2: #241714;
+  --line: #3a2924;
+  --bone: #f5ecdb;
+  --bone-dim: #cdaea1;
+  --seal: #c53632;
+  --seal-deep: #8e2a26;
+  --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+  font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+
+button, a, input { font: inherit; color: inherit; }
+
+button { cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: 2px;
+}

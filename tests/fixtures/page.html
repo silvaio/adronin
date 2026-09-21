@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>adronin fixture</title>
+  </head>
+  <body>
+    <h1>Keep this heading</h1>
+    <p id="story">The article stays.</p>
+    <div id="adsbox">AD SLOT</div>
+    <ins class="adsbygoogle">AD INS</ins>
+    <script src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" onload="window.__script='loaded'" onerror="window.__script='blocked'"></script>
+    <script src="https://www.google-analytics.com/analytics.js" onload="window.__tracker='loaded'" onerror="window.__tracker='blocked'"></script>
+    <pre id="result">waiting</pre>
+    <script>
+      const slot = document.getElementById("adsbox");
+      const ins = document.querySelector("ins.adsbygoogle");
+      const report = () => {
+        document.getElementById("result").textContent =
+          "ADRONIN:" +
+          JSON.stringify({
+            display: getComputedStyle(slot).display,
+            ins: ins && ins.isConnected ? getComputedStyle(ins).display : "removed",
+            script: window.__script || "pending",
+            tracker: window.__tracker || "pending",
+            heading: document.querySelector("h1").textContent,
+          });
+      };
+      report();
+      setTimeout(report, 1200);
+    </script>
+  </body>
+</html>

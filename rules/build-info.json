@@ -1,0 +1,17 @@
+{
+  "ads": 2918,
+  "trackers": 8562,
+  "generic_selectors": 13302,
+  "conditional_selectors": 291,
+  "site_selectors": 13018,
+  "generichide": 180,
+  "skipped": {
+    "pattern": 27,
+    "options": 12,
+    "cosmetic-only": 167,
+    "selector": 539,
+    "cosmetic-domain": 240,
+    "procedural": 8
+  },
+  "license": "EasyList and EasyPrivacy are CC BY-SA 3.0. https://easylist.to/"
+}

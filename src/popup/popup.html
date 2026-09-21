@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>adronin</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <header>
+      <img src="../../icons/icon128.png" alt="" width="48" height="48">
+      <div>
+        <h1>adronin</h1>
+        <p>ads, cut out</p>
+      </div>
+      <button id="power" class="switch" type="button" role="switch" aria-checked="true" aria-label="Block ads">
+        <span></span>
+      </button>
+    </header>
+    <p class="count"><strong id="count">-</strong> <span id="count-label">blocked on this page</span></p>
+    <button id="pause" class="pause" type="button" disabled>Pause on this site</button>
+    <p class="hint" id="hint">Reload a page after pausing it.</p>
+    <footer>
+      <button id="options" type="button">Settings</button>
+    </footer>
+    <script src="popup.js"></script>
+  </body>
+</html>

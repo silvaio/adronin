@@ -1,0 +1,5 @@
+build/
+__pycache__/
+*.pyc
+.chrome-profile/
+.DS_Store
