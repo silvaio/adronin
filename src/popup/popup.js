@@ -2,6 +2,7 @@ const power = document.querySelector("#power");
 const pause = document.querySelector("#pause");
 const count = document.querySelector("#count");
 const countLabel = document.querySelector("#count-label");
+const cutTime = document.querySelector("#cut-time");
 const hint = document.querySelector("#hint");
 const options = document.querySelector("#options");
 
@@ -13,6 +14,14 @@ function show(state) {
   power.setAttribute("aria-checked", on ? "true" : "false");
   count.textContent = state?.page ? String(state.count || 0) : "-";
   countLabel.textContent = on ? "blocked on this page" : "blocking is off";
+  const cutLabel = state?.page && state.count > 0 && state.cutLabel ? state.cutLabel : "";
+  if (cutLabel) {
+    cutTime.hidden = false;
+    cutTime.textContent = `cut in ${cutLabel}`;
+  } else {
+    cutTime.hidden = true;
+    cutTime.textContent = "";
+  }
   if (!state?.page) {
     pause.disabled = true;
     pause.textContent = "This page can't be filtered";

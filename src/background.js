@@ -19,8 +19,11 @@ const MAX_PAUSED = 200;
 const PAUSE_IDS = Array.from({ length: MAX_PAUSED }, (_, index) => DYNAMIC_BASE + index);
 
 const counts = new Map();
+const pageStarted = new Map();
+const cutMs = new Map();
 let flushTimer = null;
 const pendingCounts = new Map();
+const pendingCuts = new Map();
 let rulesetGroups = { ads: ["ads"], trackers: ["trackers"], hardening: ["hardening"] };
 let queue = Promise.resolve();
 
@@ -28,6 +31,14 @@ function badgeText(count) {
   if (!count) return "";
   if (count > 9999) return "∞";
   return String(count);
+}
+
+function formatCut(ms) {
+  if (!Number.isFinite(ms) || ms < 0) return "";
+  if (ms < 1000) return `${Math.round(ms)}ms`;
+  const seconds = ms / 1000;
+  if (seconds < 10) return `${seconds.toFixed(1).replace(/\.0$/, "")}s`;
+  return `${Math.round(seconds)}s`;
 }
 
 async function settings() {
@@ -110,13 +121,21 @@ function rememberCount(tabId) {
   const next = (counts.get(tabId) || 0) + 1;
   counts.set(tabId, next);
   pendingCounts.set(tabId, next);
+  const started = pageStarted.get(tabId);
+  if (typeof started === "number") {
+    const elapsed = Math.max(0, Date.now() - started);
+    cutMs.set(tabId, elapsed);
+    pendingCuts.set(tabId, elapsed);
+  }
   chrome.action.setBadgeText({ tabId, text: badgeText(next) });
   if (!flushTimer) {
     flushTimer = setTimeout(() => {
       flushTimer = null;
       const payload = {};
       for (const [id, count] of pendingCounts) payload[`count:${id}`] = count;
+      for (const [id, ms] of pendingCuts) payload[`cut:${id}`] = ms;
       pendingCounts.clear();
+      pendingCuts.clear();
       if (Object.keys(payload).length) chrome.storage.session.set(payload);
     }, 400);
   }
@@ -124,11 +143,15 @@ function rememberCount(tabId) {
 
 async function restoreCounts() {
   const stored = await chrome.storage.session.get(null);
-  for (const [key, count] of Object.entries(stored)) {
-    if (!key.startsWith("count:") || typeof count !== "number") continue;
-    const tabId = Number(key.slice(6));
-    counts.set(tabId, count);
-    chrome.action.setBadgeText({ tabId, text: badgeText(count) });
+  for (const [key, value] of Object.entries(stored)) {
+    if (key.startsWith("count:") && typeof value === "number") {
+      const tabId = Number(key.slice(6));
+      counts.set(tabId, value);
+      chrome.action.setBadgeText({ tabId, text: badgeText(value) });
+    }
+    if (key.startsWith("cut:") && typeof value === "number") {
+      cutMs.set(Number(key.slice(4)), value);
+    }
   }
 }
 
@@ -150,6 +173,8 @@ async function stateFor(tabId) {
     hostname,
     paused: hostname ? current.pausedSites.includes(hostname) : false,
     count: counts.get(tabId) || 0,
+    cutMs: cutMs.get(tabId) || 0,
+    cutLabel: formatCut(cutMs.get(tabId) || 0),
     page: hostname ? tab.url.startsWith("http") : false,
     lastFilterUpdate: update.lastFilterUpdate,
     lastFilterCheck: update.lastFilterCheck,
@@ -206,8 +231,10 @@ const ready = (async () => {
 chrome.webNavigation.onCommitted.addListener((details) => {
   if (details.frameId !== 0) return;
   counts.set(details.tabId, 0);
+  cutMs.delete(details.tabId);
+  pageStarted.set(details.tabId, Date.now());
   chrome.action.setBadgeText({ tabId: details.tabId, text: "" });
-  chrome.storage.session.remove(`count:${details.tabId}`);
+  chrome.storage.session.remove([`count:${details.tabId}`, `cut:${details.tabId}`]);
 });
 
 if (chrome.declarativeNetRequest.onRuleMatchedDebug) {

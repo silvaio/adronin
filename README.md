@@ -16,7 +16,7 @@ The toolbar icon is a katana cutting a banner.
 3. Turn on Developer mode.
 4. Choose Load unpacked and select this directory.
 
-The popup shows how many requests were blocked on the current tab. You can pause filtering for that site. On the options page you can turn ads or trackers off, resume paused sites, and force a filter update.
+The popup shows how many requests were blocked on the current tab, and how long the cut took (ms under one second, otherwise seconds). You can pause filtering for that site. On the options page you can turn ads or trackers off, resume paused sites, and force a filter update.
 
 Reload a tab after you pause it. New requests are blocked right away. A reload is what brings ads back on a paused page.
 

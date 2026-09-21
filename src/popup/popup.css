@@ -76,6 +76,10 @@ header p {
   color: var(--bone-dim);
 }
 
+.count-line {
+  display: block;
+}
+
 .count strong {
   color: var(--bone);
   font-size: 28px;
@@ -83,6 +87,12 @@ header p {
   font-weight: 600;
   letter-spacing: 0;
   margin-right: 4px;
+}
+
+.cut-time {
+  display: block;
+  margin-top: 4px;
+  color: var(--bone-dim);
 }
 
 .pause, footer button {
